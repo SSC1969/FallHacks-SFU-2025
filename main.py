@@ -8,6 +8,7 @@ pygame.init()
 
 
 running = True
+winCondition = False
 
 while running:
     drawGrid()

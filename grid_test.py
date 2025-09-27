@@ -6,10 +6,6 @@ GRID_SIZE = 20
 
 pygame.init()
 
-SCREEN = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-CLOCK = pygame.time.Clock()
-running = True
-
 
 def drawGrid():
     for x in range(0, WINDOW_WIDTH, GRID_SIZE):
@@ -26,23 +22,3 @@ def snapCoordinates(x, y):
     factor_y *= GRID_SIZE
 
     return (factor_x, factor_y)
-
-
-SCREEN.fill("black")
-while running:
-    drawGrid()
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-        elif event.type == pygame.MOUSEBUTTONDOWN:
-            mouse_x, mouse_y = pygame.mouse.get_pos()
-            snapped = snapCoordinates(mouse_x, mouse_y)
-            rect = pygame.Rect(snapped[0] - 40, snapped[1] - 40, 80, 80)
-            pygame.draw.rect(SCREEN, "blue", rect)
-
-    pygame.display.flip()
-
-    dt = CLOCK.tick(60) / 1000
-
-pygame.quit()

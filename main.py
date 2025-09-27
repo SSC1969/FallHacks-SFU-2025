@@ -6,6 +6,13 @@ import enum
 
 pygame.init()
 
+import pygame
+
+from src.game import Game
+
+game = Game()
+game.run()
+
 
 running = True
 winCondition = False

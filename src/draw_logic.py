@@ -1,6 +1,6 @@
 import pygame
 
-# Screen
+# self.screen
 # Level
 
 
@@ -51,14 +51,14 @@ class DrawLogic:
                     self.tile_size,
                     self.tile_size,
                 )
-                pygame.draw.rect(screen, colour, background_tile)
+                pygame.draw.rect(self.screen, colour, background_tile)
 
         # Draw vertical grid lines
         for x in range(0, self.WINDOW_WIDTH, self.tile_size):
-            pygame.draw.line(screen, border, (x, 0), (x, self.WINDOW_HEIGHT))
+            pygame.draw.line(self.screen, self.border, (x, 0), (x, self.WINDOW_HEIGHT))
         # Draw horizontal grid lines
         for y in range(0, self.WINDOW_HEIGHT, self.tile_size):
-            pygame.draw.line(screen, border, (0, y), (self.WINDOW_WIDTH, y))
+            pygame.draw.line(self.screen, self.border, (0, y), (self.WINDOW_WIDTH, y))
 
     def drawPlayer(self, player_x, player_y):
         player_rect = pygame.Rect(
@@ -67,7 +67,7 @@ class DrawLogic:
             self.tile_size,
             self.tile_size,
         )
-        pygame.draw.rect(self.screen, self.player_colour, player_rect)
+        pygame.draw.rect(self.self.screen, self.player_colour, player_rect)
 
     def snapCoordinates(self, x, y):
         factor_x = round(x / self.tile_size)

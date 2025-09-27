@@ -1,7 +1,7 @@
 import pygame
 
 # self.screen
-# Level
+# _level
 
 
 class DrawLogic:
@@ -9,45 +9,41 @@ class DrawLogic:
         0: (30, 50, 200),  # Water
         1: (100, 100, 100),  # Ground
         2: (0, 128, 128),  # Wall
+        3: (255, 215, 0),  # Goal
     }
 
-    LEVEL1 = [
-        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
-        [0, 1, 1, 1, 1, 1, 1, 0, 1, 2, 2],
-        [0, 2, 2, 1, 1, 1, 1, 0, 1, 1, 1],
-        [0, 0, 2, 1, 1, 1, 1, 0, 0, 1, 1],
-        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1],
-        [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
-        [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2],
-        [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 1],
-    ]
     rows: int
     cols: int
     tile_size: int
     screen: object
     player_colour: object
     grid_border: object
+    _level: object
     WINDOW_WIDTH: int
     WINDOW_HEIGHT: int
 
+    @property
+    def level(self):
+        return self._level
+
+    @level.setter
+    def level(self, level):
+        self._level = level
+        self.rows = len(self._level)
+        self.cols = len(self._level[0])
+        self.tile_size = self.WINDOW_HEIGHT // len(self._level)
+
     def __init__(self, screen, window_size, border, player_colour):
-        self.rows = len(self.LEVEL1)
-        self.cols = len(self.LEVEL1[0])
         self.screen = screen
         self.WINDOW_WIDTH = window_size[0]
         self.WINDOW_HEIGHT = window_size[1]
         self.grid_border = border
         self.player_colour = player_colour
-        self.tile_size = self.WINDOW_HEIGHT // len(self.LEVEL1)
-
-        print(self.tile_size)
 
     def drawGrid(self):
         for y in range(self.rows):
             for x in range(self.cols):
-                tile = self.LEVEL1[y][x]
+                tile = self._level[y][x]
                 colour = self.COLOURS[tile]
                 background_tile = pygame.Rect(
                     x * self.tile_size,
@@ -68,7 +64,9 @@ class DrawLogic:
                 self.screen, self.grid_border, (0, y), (self.WINDOW_WIDTH, y)
             )
 
-    def drawPlayer(self, player_x, player_y):
+    def drawPlayer(self, player):
+        player_x = player.player_x
+        player_y = player.player_y
         player_rect = pygame.Rect(
             player_x * self.tile_size,
             player_y * self.tile_size,

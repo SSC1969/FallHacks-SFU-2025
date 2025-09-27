@@ -1,8 +1,12 @@
 import pygame
 
+from src.draw_logic import DrawLogic
+
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
-TREE_PANEL_WIDTH_RATIO = 0.30
+TREE_PANEL_WIDTH_RATIO = 0.382
+GRID_BORDER = (200, 200, 200)
+PLAYER_COLOUR = (255, 0, 128)
 
 
 class Game:
@@ -13,6 +17,7 @@ class Game:
     tree_screen: object
     world_screen: object
     clock: object
+    draw_logic: object
     running = False
 
     def __init__(self):
@@ -27,6 +32,13 @@ class Game:
             ((1 - TREE_PANEL_WIDTH_RATIO) * WINDOW_WIDTH, WINDOW_HEIGHT)
         )
         self.clock = pygame.time.Clock()
+
+        self.draw_logic = DrawLogic(
+            self.world_screen,
+            (self.world_screen.get_width(), WINDOW_HEIGHT),
+            GRID_BORDER,
+            PLAYER_COLOUR,
+        )
         self.running = True
 
     def processInput(self):
@@ -42,8 +54,12 @@ class Game:
     def render(self):
         """Contains functions that render the current game state"""
         self.window.fill("black")
-        self.tree_screen.fill("blue")
-        self.world_screen.fill("purple")
+        self.tree_screen.fill("gray")
+        self.world_screen.fill("red")
+
+        self.draw_logic.drawGrid()
+        self.draw_logic.drawPlayer(5, 5)
+
         self.window.blit(self.tree_screen, (0, 0))
         self.window.blit(self.world_screen, (TREE_PANEL_WIDTH_RATIO * WINDOW_WIDTH, 0))
         pygame.display.update()

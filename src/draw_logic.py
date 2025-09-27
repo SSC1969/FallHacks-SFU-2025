@@ -30,8 +30,8 @@ class DrawLogic:
     WINDOW_HEIGHT: int
 
     def __init__(self, screen, window_size, border, player_colour):
-        self.rows = len(self.self.LEVEL1)
-        self.cols = len(self.self.LEVEL1[0])
+        self.rows = len(self.LEVEL1)
+        self.cols = len(self.LEVEL1[0])
         self.screen = screen
         self.WINDOW_WIDTH = window_size[0]
         self.WINDOW_HEIGHT = window_size[1]

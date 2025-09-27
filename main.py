@@ -1,5 +1,6 @@
 import pygame
 from draw_logic import *
+from player import *
 
 import enum
 
@@ -19,7 +20,6 @@ while running:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             snapped = pixel_to_grid(mouse_x, mouse_y)
             player_x, player_y = snapped
-
 
     pygame.display.flip()
     dt = CLOCK.tick(60) / 1000

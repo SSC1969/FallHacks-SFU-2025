@@ -33,8 +33,8 @@ def drawGrid():
             tile = LEVEL1[y][x]
             colour = COLOURS[tile]
             background_tile = pygame.Rect(
-                x* TILE_SIZE,
-                y* TILE_SIZE,
+                x * TILE_SIZE,
+                y * TILE_SIZE,
                 TILE_SIZE,
                 TILE_SIZE
             )

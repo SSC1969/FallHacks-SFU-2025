@@ -5,7 +5,7 @@ import pygame
 
 
 class DrawLogic:
-    self.COLOURS = {
+    COLOURS = {
         0: (30, 50, 200),  # Water
         1: (100, 100, 100),  # Ground
         2: (0, 128, 128),  # Wall

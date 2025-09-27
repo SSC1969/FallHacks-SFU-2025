@@ -1,7 +1,7 @@
 import pygame
 
 # Screen
-from game import WINDOW_HEIGHT, WINDOW_WIDTH
+from src.game import WINDOW_HEIGHT, WINDOW_WIDTH
 
 # Level
 

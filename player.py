@@ -21,6 +21,12 @@ class player:
     def moveLeft(self):
         self.player.x -= 1
 
-    def collisionCheck(self):
-        tile = 
-        if (player_x, player_y == )
+    def collisionCheckWall(self):
+        tile = LEVEL1[self.player_y][self.player_x]
+        if (tile == 2): # This means it hit a wall
+            return False
+        
+    def collisionCheckWall(self):
+        tile = LEVEL1[self.player_y][self.player_x]
+        if (tile == 3): # This means it hit a wall
+            return True

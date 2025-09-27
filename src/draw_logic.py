@@ -12,20 +12,23 @@ class DrawLogic:
     }
 
     LEVEL1 = [
-        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1],
-        [0, 1, 1, 1, 1, 1, 1, 0, 1, 2, 2, 1],
-        [0, 2, 2, 1, 1, 1, 1, 0, 1, 1, 2, 2],
-        [0, 0, 2, 1, 1, 1, 1, 0, 0, 1, 2, 2],
-        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1],
-        [0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1, 1],
-        [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1],
+        [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+        [1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1],
+        [0, 1, 1, 1, 1, 1, 1, 0, 1, 2, 2],
+        [0, 2, 2, 1, 1, 1, 1, 0, 1, 1, 1],
+        [0, 0, 2, 1, 1, 1, 1, 0, 0, 1, 1],
+        [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1],
+        [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+        [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2],
+        [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 1],
     ]
     rows: int
     cols: int
     tile_size: int
     screen: object
     player_colour: object
+    grid_border: object
     WINDOW_WIDTH: int
     WINDOW_HEIGHT: int
 
@@ -35,10 +38,11 @@ class DrawLogic:
         self.screen = screen
         self.WINDOW_WIDTH = window_size[0]
         self.WINDOW_HEIGHT = window_size[1]
+        self.grid_border = border
         self.player_colour = player_colour
-        self.tile_size = min(
-            self.WINDOW_WIDTH // self.cols, self.WINDOW_HEIGHT // self.rows
-        )
+        self.tile_size = self.WINDOW_HEIGHT // len(self.LEVEL1)
+
+        print(self.tile_size)
 
     def drawGrid(self):
         for y in range(self.rows):
@@ -55,10 +59,14 @@ class DrawLogic:
 
         # Draw vertical grid lines
         for x in range(0, self.WINDOW_WIDTH, self.tile_size):
-            pygame.draw.line(self.screen, self.border, (x, 0), (x, self.WINDOW_HEIGHT))
+            pygame.draw.line(
+                self.screen, self.grid_border, (x, 0), (x, self.WINDOW_HEIGHT)
+            )
         # Draw horizontal grid lines
         for y in range(0, self.WINDOW_HEIGHT, self.tile_size):
-            pygame.draw.line(self.screen, self.border, (0, y), (self.WINDOW_WIDTH, y))
+            pygame.draw.line(
+                self.screen, self.grid_border, (0, y), (self.WINDOW_WIDTH, y)
+            )
 
     def drawPlayer(self, player_x, player_y):
         player_rect = pygame.Rect(
@@ -67,7 +75,7 @@ class DrawLogic:
             self.tile_size,
             self.tile_size,
         )
-        pygame.draw.rect(self.self.screen, self.player_colour, player_rect)
+        pygame.draw.rect(self.screen, self.player_colour, player_rect)
 
     def snapCoordinates(self, x, y):
         factor_x = round(x / self.tile_size)

@@ -1,4 +1,0 @@
-import sandwich
-
-print("big ")
-

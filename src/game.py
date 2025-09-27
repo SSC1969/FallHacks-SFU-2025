@@ -1,12 +1,26 @@
 import pygame
 
 from src.draw_logic import DrawLogic
+from src.player import Player
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 TREE_PANEL_WIDTH_RATIO = 0.382
 GRID_BORDER = (200, 200, 200)
 PLAYER_COLOUR = (255, 0, 128)
+
+LEVEL_ONE = [
+    [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 0, 0, 0, 0, 0, 0, 1, 3, 1],
+    [0, 1, 1, 1, 1, 1, 1, 0, 1, 2, 2],
+    [0, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1],
+    [0, 0, 2, 1, 1, 1, 1, 0, 0, 1, 1],
+    [0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 1],
+    [0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2],
+    [0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 1],
+]
 
 
 class Game:
@@ -18,6 +32,7 @@ class Game:
     world_screen: object
     clock: object
     draw_logic: object
+    player: Player
     running = False
 
     def __init__(self):
@@ -39,6 +54,11 @@ class Game:
             GRID_BORDER,
             PLAYER_COLOUR,
         )
+        self.draw_logic.level = LEVEL_ONE
+
+        self.player = Player(5, 5)
+        self.player.level = LEVEL_ONE
+
         self.running = True
 
     def processInput(self):
@@ -47,8 +67,21 @@ class Game:
             if event.type == pygame.QUIT:
                 self.running = False
 
+            # NOTE: Temporary input functions
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_d:
+                    self.player.moveRight()
+                elif event.key == pygame.K_s:
+                    self.player.moveDown()
+                elif event.key == pygame.K_a:
+                    self.player.moveLeft()
+                elif event.key == pygame.K_w:
+                    self.player.moveUp()
+
     def update(self):
         """Contains functions that are run each frame to update the game state"""
+        if self.player.dead:
+            self.running = False
         pass
 
     def render(self):
@@ -58,7 +91,7 @@ class Game:
         self.world_screen.fill("red")
 
         self.draw_logic.drawGrid()
-        self.draw_logic.drawPlayer(5, 5)
+        self.draw_logic.drawPlayer(self.player)
 
         self.window.blit(self.tree_screen, (0, 0))
         self.window.blit(self.world_screen, (TREE_PANEL_WIDTH_RATIO * WINDOW_WIDTH, 0))

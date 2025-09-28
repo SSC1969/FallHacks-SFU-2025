@@ -2,12 +2,14 @@ import pygame
 
 from src.draw_logic import DrawLogic
 from src.player import Player
+from src.tree import Tree
 
 WINDOW_WIDTH = 1280
 WINDOW_HEIGHT = 720
 TREE_PANEL_WIDTH_RATIO = 0.382
 GRID_BORDER = (200, 200, 200)
 PLAYER_COLOUR = (255, 0, 128)
+
 
 LEVEL_ONE = [
     [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -33,6 +35,7 @@ class Game:
     clock: object
     draw_logic: object
     player: Player
+    tree: object
     running = False
 
     def __init__(self):
@@ -59,10 +62,14 @@ class Game:
         self.player = Player(5, 5)
         self.player.level = LEVEL_ONE
 
+        self.tree = Tree(self.tree_screen, 14)
+        self.tree.clock = self.clock
+
         self.running = True
 
     def processInput(self):
         """Contains any input checks and the functions they call"""
+        self.tree.traverse_animation()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -92,6 +99,8 @@ class Game:
 
         self.draw_logic.drawGrid()
         self.draw_logic.drawPlayer(self.player)
+
+        self.tree.draw()
 
         self.window.blit(self.tree_screen, (0, 0))
         self.window.blit(self.world_screen, (TREE_PANEL_WIDTH_RATIO * WINDOW_WIDTH, 0))

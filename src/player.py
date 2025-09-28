@@ -62,5 +62,5 @@ class Player:
         elif tile == 2:  # wall
             return 0
         elif tile == 3:  # goal
-            return 0
+            return 1
         return 1

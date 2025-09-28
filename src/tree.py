@@ -1,4 +1,3 @@
-import sys
 from enum import Enum
 
 import pygame
@@ -27,6 +26,10 @@ class Tree:
     y_step = box_size[1] * 2
     x_shift = 0
     y_shift = 0
+
+    selected_node: object
+    prev_node: object
+    traversal: object
 
     RUN_BUTTON: object
     RUN_SETUP: object
@@ -132,74 +135,63 @@ class Tree:
         yield from self.traverse_gen(leaf.left)
         yield from self.traverse_gen(leaf.right)
 
-    async def traverse_animation(self):
+    def start_traverse_anim(self):
         # This runs the checker for traversal animation
         self.prev_node = None
         self.selected_node = None
 
-        traversal = None
+        self.traversal = None
+        for layer in self.nodelist:
+            for node in layer:
+                node.visited = False
+            self.prev_node = None
 
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    sys.exit()
+        # Create fresh generator and start timer
+        self.traversal = self.traverse_gen(self.root)
+        pygame.time.set_timer(pygame.USEREVENT, 300)
 
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if self.RUN_SETUP_RECT.collidepoint(event.pos):
-                        # Clear all visited flags
-                        for layer in self.nodelist:
-                            for node in layer:
-                                node.visited = False
-                        self.prev_node = None
+    def traverse_animation_check_node(self):
+        pos = pygame.mouse.get_pos()
+        # Search all nodes for execution
+        for layer in self.nodelist:
+            for node in layer:
+                rect = node.rect.move(self.x_shift, self.y_shift)
+                if rect.collidepoint(pos):
+                    self.selected_node = node
+                    break
 
-                        # Create fresh generator and start timer
-                        traversal = self.traverse_gen(self.root)
-                        pygame.time.set_timer(pygame.USEREVENT, 300)
+    def traverse_animation_step(self):
+        try:
+            # Get the next node
+            node = next(self.traversal)
+            # Unhighlight prev node
+            if self.prev_node:
+                self.prev_node.visited = False
+            # Highlight the current one
+            node.visited = True
+            self.prev_node = node
+            node.execute_action()
+        except StopIteration:
+            pygame.time.set_timer(pygame.USEREVENT, 0)  # Finished traversing
 
-                if event.type == pygame.USEREVENT and traversal:
-                    try:
-                        # Get the next node
-                        node = next(traversal)
-                        # Unhighlight prev node
-                        if self.prev_node:
-                            self.prev_node.visited = False
-                        # Highlight the current one
-                        node.visited = True
-                        self.prev_node = node
-                        node.execute_action()
-                    except StopIteration:
-                        pygame.time.set_timer(
-                            pygame.USEREVENT, 0
-                        )  # Finished traversing
+    def traverse_animation_change_node_check(self, event):
+        if self.selected_node:
+            if event.key == pygame.K_UP:
+                self.selected_node.direction = "up"
+            elif event.key == pygame.K_DOWN:
+                self.selected_node.direction = "down"
+            elif event.key == pygame.K_LEFT:
+                self.selected_node.direction = "left"
+            elif event.key == pygame.K_RIGHT:
+                self.selected_node.direction = "right"
+            elif event.key == pygame.K_BACKSPACE:
+                self.selected_node.direction = None
 
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    pos = pygame.mouse.get_pos()
-                    # Search all nodes for execution
-                    for layer in self.nodelist:
-                        for node in layer:
-                            rect = node.rect.move(self.x_shift, self.y_shift)
-                            if rect.collidepoint(pos):
-                                self.selected_node = node
-                                break
-
-                elif event.type == pygame.KEYDOWN and self.selected_node:
-                    if event.key == pygame.K_UP:
-                        self.selected_node.direction = "up"
-                    elif event.key == pygame.K_DOWN:
-                        self.selected_node.direction = "down"
-                    elif event.key == pygame.K_LEFT:
-                        self.selected_node.direction = "left"
-                    elif event.key == pygame.K_RIGHT:
-                        self.selected_node.direction = "right"
-                    elif event.key == pygame.K_BACKSPACE:
-                        self.selected_node.direction = None
-
-            # # Advance one step per frame (or can tie to a timer, as is currently)
-            # try:
-            #     next(traversal)
-            # except StopIteration:
-            #     pass # Traversal is complete
+        # # Advance one step per frame (or can tie to a timer, as is currently)
+        # try:
+        #     next(traversal)
+        # except StopIteration:
+        #     pass # Traversal is complete
 
 
 class Node:

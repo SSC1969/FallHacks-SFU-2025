@@ -48,8 +48,3 @@ class player(pygame.sprite.Sprite):
         tile = LEVEL1[self.player_y][self.player_x]
         if (tile == 2): # This means it hit a wall
             return False
-        
-    def collisionCheckWall(self):
-        tile = LEVEL1[self.player_y][self.player_x]
-        if (tile == 3): # This means it hit a wall
-            return True

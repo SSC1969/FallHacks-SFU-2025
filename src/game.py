@@ -69,7 +69,6 @@ class Game:
 
     def processInput(self):
         """Contains any input checks and the functions they call"""
-        self.tree.traverse_animation()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -84,6 +83,15 @@ class Game:
                     self.player.moveLeft()
                 elif event.key == pygame.K_w:
                     self.player.moveUp()
+
+                self.tree.traverse_animation_change_node_check(event)
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                self.tree.traverse_animation_check_node()
+                if self.tree.RUN_SETUP_RECT.collidepoint(event.pos):
+                    self.tree.start_traverse_anim()
+
+            if event.type == pygame.USEREVENT and self.tree.traversal:
+                self.tree.traverse_animation_step()
 
     def update(self):
         """Contains functions that are run each frame to update the game state"""

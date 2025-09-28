@@ -19,11 +19,11 @@ class Tree:
 
     clock: object
     root_x: object
-    box_size = (25, 25)
-    x_step = box_size[0] + 2
+    box_size = (45, 45)
+    x_step = box_size[0]
 
     y_start = 50
-    y_step = box_size[1] * 2
+    y_step = box_size[1] * 4
     x_shift = 0
     y_shift = 0
 

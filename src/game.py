@@ -64,6 +64,7 @@ class Game:
 
         self.tree = Tree(self.tree_screen, 14)
         self.tree.clock = self.clock
+        self.tree.player = self.player
 
         self.running = True
 

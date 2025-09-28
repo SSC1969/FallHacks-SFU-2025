@@ -10,6 +10,8 @@ class NodeType(Enum):
 
 
 class Tree:
+    player: object
+
     nodelist = []
     nodecount = 0
     root: object
@@ -325,15 +327,14 @@ class Node:
 
     def execute_action(self):
         if self.direction == "up":
-            #    self.on_up()
+            self.tree.player.moveUp()
             print("Moving up!")
         elif self.direction == "down":
-            #    self.on_down()
+            self.tree.player.moveDown()
             print("Moving down!")
         elif self.direction == "left":
-            #    self.on_left()
+            self.tree.player.moveLeft()
             print("Moving left!")
         elif self.direction == "right":
-            #    self.on_right()
-
+            self.tree.player.moveRight()
             print("Moving right!")
